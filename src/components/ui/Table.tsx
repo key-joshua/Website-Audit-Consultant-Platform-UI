@@ -41,7 +41,7 @@ export function TableHead({ children, className }: { children: ReactNode; classN
   return (
     <th
       className={cn(
-        'p-4 text-left text-sm font-semibold text-foreground',
+        'p-4 text-left align-top text-sm font-semibold text-foreground',
         className,
       )}
     >
@@ -51,5 +51,5 @@ export function TableHead({ children, className }: { children: ReactNode; classN
 }
 
 export function TableCell({ children, className }: { children: ReactNode; className?: string }) {
-  return <td className={cn('bg-surface p-4 text-foreground text-sm text-muted-foreground', className)}>{children}</td>
+  return <td className={cn('bg-surface p-4 align-top text-foreground text-sm text-muted-foreground', className)}>{children}</td>
 }

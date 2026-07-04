@@ -1,4 +1,5 @@
 import { AlertTriangle, Link2 } from 'lucide-react'
+import { TruncatedCell } from '@/components/audit/TruncatedCell'
 import {
   Table,
   TableBody,
@@ -15,8 +16,9 @@ interface FindingsTableProps {
 
 function MissingCell({ value, label }: { value: string | null; label: string }) {
   if (value) {
-    return <span className="line-clamp-2">{value}</span>
+    return <TruncatedCell label={label} content={value} />
   }
+
   return (
     <span className="inline-flex items-center gap-1">
       <AlertTriangle className="h-4 w-4 shrink-0 text-status-warning" strokeWidth={2.5} />
@@ -29,7 +31,7 @@ function formatIssues(page: PageFinding): string {
   if (!page.issues.length) return '—'
   return page.issues
     .map((issue) => `${issue.issueType} (${issue.severity}): ${issue.message}`)
-    .join('; ')
+    .join('\n')
 }
 
 export function FindingsTable({ pages }: FindingsTableProps) {
@@ -65,40 +67,53 @@ export function FindingsTable({ pages }: FindingsTableProps) {
           {pages.map((page) => {
             const hasH1 = page.headings.h1.length > 0
             const hasH2 = page.h2Count > 0
+            const issuesText = formatIssues(page)
+            const h2Text = hasH2 ? `${page.h2Count} — ${page.headings.h2.join(', ')}` : '—'
+            const ctaText = page.ctaTexts.length > 0 ? page.ctaTexts.join(', ') : '—'
+
             return (
               <TableRow key={page.url}>
-                <TableCell className="min-w-[7rem] max-w-[120px]">
-                  <span className="line-clamp-2">{page.pageName}</span>
+                <TableCell className="max-w-[120px]">
+                  <TruncatedCell label="Page" content={page.pageName} />
                 </TableCell>
-                <TableCell className="min-w-[14rem] max-w-[240px] pr-6">
-                  <a
-                    href={page.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-start gap-1.5 hover:underline"
-                  >
+                <TableCell className="max-w-[200px] pr-6">
+                  <div className="flex items-start gap-1.5">
                     <Link2
                       className="mt-0.5 h-4 w-4 shrink-0 text-brand-mid"
                       strokeWidth={2.5}
                     />
-                    <span className="line-clamp-2 break-all">{page.url}</span>
-                  </a>
+                    <TruncatedCell
+                      label="URL"
+                      content={page.url}
+                      className="break-all"
+                      modalContent={
+                        <a
+                          href={page.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-brand-mid hover:underline"
+                        >
+                          {page.url}
+                        </a>
+                      }
+                    />
+                  </div>
                 </TableCell>
                 <TableCell className="min-w-[4.5rem] pl-2 whitespace-nowrap">
                   <span>{page.statusCode}</span>
                 </TableCell>
                 <TableCell className="max-w-[160px]">
-                  <MissingCell value={page.title} label="title" />
+                  <MissingCell value={page.title} label="Title" />
                 </TableCell>
                 <TableCell className="max-w-[160px]">
-                  <MissingCell value={page.description} label="meta" />
+                  <MissingCell value={page.description} label="Meta Description" />
                 </TableCell>
                 <TableCell>
                   <span>{page.imagesMissingAltText}</span>
                 </TableCell>
-                <TableCell>
+                <TableCell className="max-w-[140px]">
                   {hasH1 ? (
-                    <span className="line-clamp-2">{page.headings.h1[0]}</span>
+                    <TruncatedCell label="H1" content={page.headings.h1[0]} />
                   ) : (
                     <span className="inline-flex items-center gap-1">
                       <AlertTriangle
@@ -109,11 +124,9 @@ export function FindingsTable({ pages }: FindingsTableProps) {
                     </span>
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell className="max-w-[140px]">
                   {hasH2 ? (
-                    <span className="line-clamp-2">
-                      {page.h2Count} — {page.headings.h2.join(', ')}
-                    </span>
+                    <TruncatedCell label="H2" content={h2Text} />
                   ) : (
                     <span>—</span>
                   )}
@@ -121,20 +134,25 @@ export function FindingsTable({ pages }: FindingsTableProps) {
                 <TableCell>
                   <span>{page.internalImagesCount}</span>
                 </TableCell>
-                <TableCell>
-                  <span>
-                    {page.internalLinksCount} int / {page.externalLinksCount} ext
-                  </span>
+                <TableCell className="max-w-[120px]">
+                  <TruncatedCell
+                    label="Links"
+                    content={`${page.internalLinksCount} int / ${page.externalLinksCount} ext`}
+                  />
                 </TableCell>
-                <TableCell>
+                <TableCell className="max-w-[140px]">
                   {page.ctaTexts.length > 0 ? (
-                    <span>{page.ctaTexts.join(', ')}</span>
+                    <TruncatedCell label="CTAs" content={ctaText} />
                   ) : (
                     <span>—</span>
                   )}
                 </TableCell>
-                <TableCell className="max-w-[240px]">
-                  <span className="line-clamp-3">{formatIssues(page)}</span>
+                <TableCell className="max-w-[200px]">
+                  {page.issues.length > 0 ? (
+                    <TruncatedCell label="Issues" content={issuesText} />
+                  ) : (
+                    <span>—</span>
+                  )}
                 </TableCell>
               </TableRow>
             )
