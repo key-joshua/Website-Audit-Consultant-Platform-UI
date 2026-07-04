@@ -1,4 +1,15 @@
-import { AlertTriangle, FileText, Heading, Image } from 'lucide-react'
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Clock,
+  FileText,
+  Globe,
+  Heading,
+  Image,
+  MousePointerClick,
+  Star,
+  XCircle,
+} from 'lucide-react'
 import { StatCard } from '@/components/ui/StatCard'
 import type { VersionFindings } from '@/types'
 
@@ -14,10 +25,18 @@ export function FindingsSummary({ findings }: FindingsSummaryProps) {
       <h2 className="text-lg font-semibold">Summary</h2>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
+        <StatCard label="Website Pages" value={summary.totalWebsitePages} icon={Globe} />
+        <StatCard label="Pages Checked" value={summary.totalPagesChecked} icon={FileText} />
         <StatCard
-          label="Pages Checked"
-          value={summary.totalPagesChecked}
-          icon={FileText}
+          label="Successful Pages"
+          value={summary.successfulPagesChecked}
+          icon={CheckCircle2}
+        />
+        <StatCard
+          label="Failed Pages"
+          value={summary.failedPagesChecked}
+          icon={XCircle}
+          variant={summary.failedPagesChecked > 0 ? 'danger' : 'default'}
         />
         <StatCard
           label="Missing Titles"
@@ -54,6 +73,13 @@ export function FindingsSummary({ findings }: FindingsSummaryProps) {
           value={summary.pagesMissingHeadings.h3}
           icon={Heading}
           variant={summary.pagesMissingHeadings.h3 > 0 ? 'warning' : 'default'}
+        />
+        <StatCard label="Total CTAs" value={summary.totalCta} icon={MousePointerClick} />
+        <StatCard label="Audit Score" value={summary.auditScore} icon={Star} />
+        <StatCard
+          label="Audit Duration (s)"
+          value={summary.auditDurationSeconds}
+          icon={Clock}
         />
       </div>
     </div>

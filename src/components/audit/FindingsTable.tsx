@@ -25,6 +25,13 @@ function MissingCell({ value, label }: { value: string | null; label: string }) 
   )
 }
 
+function formatIssues(page: PageFinding): string {
+  if (!page.issues.length) return '—'
+  return page.issues
+    .map((issue) => `${issue.issueType} (${issue.severity}): ${issue.message}`)
+    .join('; ')
+}
+
 export function FindingsTable({ pages }: FindingsTableProps) {
   if (pages.length === 0) {
     return (
@@ -40,21 +47,30 @@ export function FindingsTable({ pages }: FindingsTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>URL</TableHead>
+            <TableHead className="min-w-[7rem]">Page</TableHead>
+            <TableHead className="min-w-[14rem] pr-6">URL</TableHead>
+            <TableHead className="min-w-[4.5rem] pl-2 whitespace-nowrap">Status</TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Meta Description</TableHead>
             <TableHead>Alt Issues</TableHead>
             <TableHead>H1</TableHead>
+            <TableHead>H2</TableHead>
+            <TableHead>Images</TableHead>
             <TableHead>Links</TableHead>
             <TableHead>CTAs</TableHead>
+            <TableHead>Issues</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {pages.map((page) => {
             const hasH1 = page.headings.h1.length > 0
+            const hasH2 = page.h2Count > 0
             return (
               <TableRow key={page.url}>
-                <TableCell className="max-w-[200px]">
+                <TableCell className="min-w-[7rem] max-w-[120px]">
+                  <span className="line-clamp-2">{page.pageName}</span>
+                </TableCell>
+                <TableCell className="min-w-[14rem] max-w-[240px] pr-6">
                   <a
                     href={page.url}
                     target="_blank"
@@ -65,8 +81,11 @@ export function FindingsTable({ pages }: FindingsTableProps) {
                       className="mt-0.5 h-4 w-4 shrink-0 text-brand-mid"
                       strokeWidth={2.5}
                     />
-                    <span className="line-clamp-2">{page.url}</span>
+                    <span className="line-clamp-2 break-all">{page.url}</span>
                   </a>
+                </TableCell>
+                <TableCell className="min-w-[4.5rem] pl-2 whitespace-nowrap">
+                  <span>{page.statusCode}</span>
                 </TableCell>
                 <TableCell className="max-w-[160px]">
                   <MissingCell value={page.title} label="title" />
@@ -91,6 +110,18 @@ export function FindingsTable({ pages }: FindingsTableProps) {
                   )}
                 </TableCell>
                 <TableCell>
+                  {hasH2 ? (
+                    <span className="line-clamp-2">
+                      {page.h2Count} — {page.headings.h2.join(', ')}
+                    </span>
+                  ) : (
+                    <span>—</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <span>{page.internalImagesCount}</span>
+                </TableCell>
+                <TableCell>
                   <span>
                     {page.internalLinksCount} int / {page.externalLinksCount} ext
                   </span>
@@ -101,6 +132,9 @@ export function FindingsTable({ pages }: FindingsTableProps) {
                   ) : (
                     <span>—</span>
                   )}
+                </TableCell>
+                <TableCell className="max-w-[240px]">
+                  <span className="line-clamp-3">{formatIssues(page)}</span>
                 </TableCell>
               </TableRow>
             )

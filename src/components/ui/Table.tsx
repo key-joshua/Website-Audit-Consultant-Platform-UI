@@ -14,7 +14,7 @@ export function Table({ children, className }: TableProps) {
         className,
       )}
     >
-      <table className="w-full text-sm">{children}</table>
+      <table className="min-w-[1500px] text-sm">{children}</table>
     </div>
   )
 }

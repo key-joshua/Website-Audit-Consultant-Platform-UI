@@ -52,7 +52,7 @@ export function VersionsPage() {
           {data.length} audit run{data.length !== 1 ? 's' : ''} — click a version to view findings.
         </p>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4">
         {data.map((version) => (
           <VersionCard key={version.id} version={version} />
         ))}

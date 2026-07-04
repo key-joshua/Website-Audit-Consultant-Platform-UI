@@ -1,10 +1,13 @@
 import axios from 'axios'
+import { ApiError } from '@/utils/apiError'
 
-const baseURL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api'
+const baseURL =
+  import.meta.env.VITE_API_BASE_URL ??
+  'https://website-audit-consultant-llatform-server.onrender.com/api'
 
 export const axiosClient = axios.create({
   baseURL,
-  timeout: 30000,
+  timeout: 120000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -13,8 +16,29 @@ export const axiosClient = axios.create({
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    const message =
-      error.response?.data?.message ?? error.message ?? 'An unexpected error occurred'
-    return Promise.reject(new Error(message))
+    const status = error.response?.status
+    const bodyMessage =
+      typeof error.response?.data?.message === 'string' ? error.response.data.message : null
+
+    if (status === 502) {
+      return Promise.reject(
+        new ApiError(
+          bodyMessage ?? 'The audit server returned an error (502). The backend may be down or restarting.',
+          status,
+        ),
+      )
+    }
+
+    if (status === 429) {
+      return Promise.reject(
+        new ApiError(
+          bodyMessage ?? 'Too many requests. Please wait a minute and try again.',
+          status,
+        ),
+      )
+    }
+
+    const message = bodyMessage ?? error.message ?? 'An unexpected error occurred'
+    return Promise.reject(new ApiError(message, status))
   },
 )

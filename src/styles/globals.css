@@ -3,8 +3,8 @@
 :root,
 .dark {
     --background: #000000;
-    --surface: #0a0b0b;
-    --border: #1c1d1d;
+    --surface: #151818;
+    --border: #242727;
     --foreground: #ffffff;
     --muted-foreground: #a3a3a3;
     --brand-start: #f2741f;
@@ -22,7 +22,6 @@
 
 @theme inline {
     --color-background: var(--background);
-    --color-nav: var(--nav);
     --color-surface: var(--surface);
     --color-border: var(--border);
     --color-foreground: var(--foreground);

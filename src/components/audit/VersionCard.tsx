@@ -4,7 +4,10 @@ import {
   CheckCircle2,
   Clock,
   FileText,
+  Globe,
   Image,
+  MousePointerClick,
+  Star,
   XCircle,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -47,7 +50,7 @@ export function VersionCard({ version }: VersionCardProps) {
                   {statusLabel(version.status)}
                 </Badge>
               </div>
-              <p className="truncate text-sm text-muted-foreground">{version.url}</p>
+              <p className="truncate text-xs text-muted-foreground">{version.url}</p>
             </div>
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full brand-gradient transition-transform group-hover:translate-x-0.5">
               <ArrowRight className="h-4 w-4 text-white" strokeWidth={2.5} />
@@ -64,7 +67,14 @@ export function VersionCard({ version }: VersionCardProps) {
               <FileText className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
               <span className="text-xs">
                 <span className="font-medium text-foreground">{version.totalPagesChecked}</span>{' '}
-                pages
+                audited
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Globe className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
+              <span className="text-xs">
+                <span className="font-medium text-foreground">{version.totalWebsitePages}</span>{' '}
+                site pages
               </span>
             </div>
             <div className="flex items-center gap-1.5">
@@ -77,9 +87,44 @@ export function VersionCard({ version }: VersionCardProps) {
               </span>
             </div>
             <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
+              <span className="text-xs">
+                <span className="font-medium text-foreground">
+                  {version.successfulPagesChecked}
+                </span>{' '}
+                successful
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <XCircle className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
+              <span className="text-xs">
+                <span className="font-medium text-foreground">{version.failedPagesChecked}</span>{' '}
+                failed
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
               <AlertTriangle className="h-3.5 w-3.5 text-amber-400" strokeWidth={1.75} />
               <span className="text-xs">
                 <span className="font-medium text-amber-400">{issueCount}</span> issues
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Star className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
+              <span className="text-xs">
+                Score{' '}
+                <span className="font-medium text-foreground">{version.auditScore}</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <MousePointerClick className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
+              <span className="text-xs">
+                <span className="font-medium text-foreground">{version.totalCta}</span> CTAs
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
+              <span className="text-xs">
+                <span className="font-medium text-foreground">{version.auditDurationSeconds}</span>s
               </span>
             </div>
           </div>

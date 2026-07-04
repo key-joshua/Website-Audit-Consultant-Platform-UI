@@ -1,4 +1,4 @@
-import { AlertTriangle, ArrowLeft } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, Clock, Globe, Link2 } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { FindingsSummary } from '@/components/audit/FindingsSummary'
 import { FindingsTable } from '@/components/audit/FindingsTable'
@@ -71,9 +71,20 @@ export function VersionFindingsPage() {
               {statusLabel(data.status)}
             </span>
           </div>
-          <p className="truncate text-sm text-muted-foreground">
-            {data.url} · {formatDate(data.scrapedAt)}
-          </p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground sm:justify-end">
+            <span className="inline-flex min-w-0 max-w-full items-center gap-1.5">
+              <Link2 className="h-3.5 w-3.5 shrink-0 text-brand-end" strokeWidth={2.5} />
+              <span className="truncate">{data.url}</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Globe className="h-3.5 w-3.5 shrink-0 text-brand-end" strokeWidth={2.5} />
+              <span>{data.domain}</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5 shrink-0 text-brand-end" strokeWidth={2.5} />
+              <span>{formatDate(data.scrapedAt)}</span>
+            </span>
+          </div>
         </div>
       </div>
 

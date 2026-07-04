@@ -6,12 +6,20 @@ export interface HeadingCounts {
   h3: number
 }
 
+export interface PageIssue {
+  issueType: string
+  severity: string
+  message: string
+}
+
 export interface AuditVersion {
   id: string
   label: string
   url: string
+  domain: string
   scrapedAt: string
   status: AuditStatus
+  totalWebsitePages: number
   totalPagesChecked: number
   successfulPagesChecked: number
   failedPagesChecked: number
@@ -19,6 +27,9 @@ export interface AuditVersion {
   pagesMissingMetaDesc: number
   totalImagesMissingAltText: number
   pagesMissingHeadings: HeadingCounts
+  totalCta: number
+  auditScore: number
+  auditDurationSeconds: number
 }
 
 export interface PageHeadings {
@@ -28,7 +39,9 @@ export interface PageHeadings {
 }
 
 export interface PageFinding {
+  pageName: string
   url: string
+  statusCode: number
   title: string | null
   description: string | null
   ctaTexts: string[]
@@ -37,16 +50,21 @@ export interface PageFinding {
   internalImagesCount: number
   externalImagesCount: number
   imagesMissingAltText: number
+  h2Count: number
   headings: PageHeadings
+  issues: PageIssue[]
 }
 
 export interface VersionFindings {
   versionId: string
   label: string
   url: string
+  domain: string
+  websiteUrls: string[]
   scrapedAt: string
   status: AuditStatus
   summary: {
+    totalWebsitePages: number
     totalPagesChecked: number
     successfulPagesChecked: number
     failedPagesChecked: number
@@ -54,6 +72,9 @@ export interface VersionFindings {
     pagesMissingMetaDesc: number
     totalImagesMissingAltText: number
     pagesMissingHeadings: HeadingCounts
+    totalCta: number
+    auditScore: number
+    auditDurationSeconds: number
   }
   pages: PageFinding[]
 }
