@@ -1,15 +1,4 @@
-import {
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  FileText,
-  Globe,
-  Heading,
-  Image,
-  MousePointerClick,
-  Star,
-  XCircle,
-} from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Clock, FileText, Globe, Heading, Image, MousePointerClick, Star, XCircle, } from 'lucide-react'
 import { StatCard } from '@/components/ui/StatCard'
 import type { VersionFindings } from '@/types'
 
@@ -68,19 +57,9 @@ export function FindingsSummary({ findings }: FindingsSummaryProps) {
           icon={Heading}
           variant={summary.pagesMissingHeadings.h2 > 0 ? 'warning' : 'default'}
         />
-        <StatCard
-          label="Missing H3"
-          value={summary.pagesMissingHeadings.h3}
-          icon={Heading}
-          variant={summary.pagesMissingHeadings.h3 > 0 ? 'warning' : 'default'}
-        />
         <StatCard label="Total CTAs" value={summary.totalCta} icon={MousePointerClick} />
         <StatCard label="Audit Score" value={summary.auditScore} icon={Star} />
-        <StatCard
-          label="Audit Duration (s)"
-          value={summary.auditDurationSeconds}
-          icon={Clock}
-        />
+        <StatCard label="Audit Duration (s)" value={summary.auditDurationSeconds} icon={Clock} />
       </div>
     </div>
   )
